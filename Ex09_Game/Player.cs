@@ -33,10 +33,10 @@ namespace Ex09_Game
 			if(Lives <= 0)
 			{
 				Console.SetCursorPosition(0, Program.map.MapArray.GetLength(1));
+				Console.ForegroundColor = Color;
 				Console.WriteLine(Name + " has died!");
 				Console.SetCursorPosition(PosX, PosY);
-				Console.ForegroundColor = Color;
-				Console.Write('X');
+				Console.Write('X'); 
 			}
 		}
 
@@ -64,13 +64,22 @@ namespace Ex09_Game
 						}
 						if (found) break;
 					}
+					int waittime = 500;
 					while (isAI)
 					{
-						Thread.Sleep(500);
+						Thread.Sleep(waittime);
+						if (Lives <= 0) isAI = false;
 						if(p != null){
-							int moveX = Math.Max(Math.Min(p.PosX - PosX, 1), -1);
-							int moveY = Math.Max(Math.Min(p.PosY - PosY, 1), -1);
-							Program.map.Move(this, moveX, moveY);
+							if(p.Lives > 0)
+							{
+								int moveX = Math.Max(Math.Min(p.PosX - PosX, 1), -1);
+								int moveY = Math.Max(Math.Min(p.PosY - PosY, 1), -1);
+								Program.map.Move(this, moveX, moveY);
+								waittime = (int)Math.Max(waittime - 5, 100);
+							}else
+							{
+								Program.map.Move(this, rand.Next(-1, 2), rand.Next(-1, 2));
+							}
 						}
 					}
 				}
