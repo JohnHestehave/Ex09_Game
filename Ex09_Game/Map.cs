@@ -32,8 +32,12 @@ namespace Ex09_Game
 			{
 				for (int x = 0; x < MapArray.GetLength(0); x++)
 				{
-					c = 'X';
-					if (MapArray[x, y] != null) c = MapArray[x, y].DisplayedChar;
+					c = ' ';
+					if (MapArray[x, y] != null)
+					{
+						c = MapArray[x, y].DisplayedChar;
+						Console.ForegroundColor = MapArray[x, y].Color;
+					}
 					Console.SetCursorPosition(x, y);
 					Console.Write(c);
 				}
@@ -42,6 +46,8 @@ namespace Ex09_Game
 
 		public void Move(Player player, int xOffset, int yOffset)
 		{
+			if (xOffset == 0 && yOffset == 0) return;
+			if (player.Lives <= 0) return;
 			int FromX = player.PosX;
 			int FromY = player.PosY;
 			int ToX = player.PosX + xOffset;
@@ -53,11 +59,15 @@ namespace Ex09_Game
 					MapArray[ToX, ToY] = MapArray[FromX, FromY];
 					MapArray[FromX, FromY] = null;
 					Console.SetCursorPosition(FromX, FromY);
-					Console.Write('X');
+					Console.Write(' ');
 					Console.SetCursorPosition(ToX, ToY);
+					Console.ForegroundColor = MapArray[ToX, ToY].Color;
 					Console.Write(MapArray[ToX, ToY].DisplayedChar);
 					player.PosX = ToX;
 					player.PosY = ToY;
+				}else
+				{
+					Attack(MapArray[ToX, ToY]);
 				}
 			}
 		}
@@ -75,7 +85,11 @@ namespace Ex09_Game
 			}
 		}
 		*/
-
+		public void Attack(Player player)
+		{
+			player.Hit();
+		}
+		/*
 		public void Attack(int FromX, int FromY, int ToX, int ToY)
 		{
 			if (MapArray[FromX, FromY] != null && MapArray[ToX, ToY] != null)
@@ -89,6 +103,7 @@ namespace Ex09_Game
 				}
 			}
 		}
+		*/
 
 	}
 }
