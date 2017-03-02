@@ -15,11 +15,18 @@ namespace Ex09_Game
 			map = new Map(80, 23);
 			Player player1 = new Player("Player 1", 'P', ConsoleColor.Cyan);
 			map.AddPlayerAt(10, 10, player1);
+			Thread PowerThread = new Thread(new ThreadStart(player1.PowerTicker));
 
 			Player player2AI = new Player("Player 2", 'E', ConsoleColor.Red);
 			map.AddPlayerAt(70, 10, player2AI);
 			Thread AIthread = new Thread(new ThreadStart(player2AI.StartAI));
 			AIthread.Start();
+
+			PowerUpSpawner pus = new PowerUpSpawner();
+			Thread pusthread = new Thread(new ThreadStart(pus.Start));
+			pusthread.Start();
+
+			PowerThread.Start();
 
 			bool running = true;
 			while (running)

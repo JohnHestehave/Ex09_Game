@@ -20,8 +20,16 @@ namespace Ex09_Game
 				MapArray[x, y] = player;
 				player.PosX = x;
 				player.PosY = y;
+				if (player.Name != "POWERUP")
+				{
+					DrawMap();
+				}else
+				{
+					Console.SetCursorPosition(x, y);
+					Console.ForegroundColor = player.Color;
+					Console.Write(player.DisplayedChar);
+				}
 			}
-			DrawMap();
 		}
 
 		public void DrawMap()
@@ -67,7 +75,22 @@ namespace Ex09_Game
 					player.PosY = ToY;
 				}else
 				{
-					Attack(MapArray[ToX, ToY]);
+					if(MapArray[ToX, ToY].Name != "POWERUP")
+					{
+						Attack(player, MapArray[ToX, ToY]);
+					}else if(!player.isAI && MapArray[ToX, ToY].Name == "POWERUP")
+					{
+						MapArray[ToX, ToY] = MapArray[FromX, FromY];
+						MapArray[FromX, FromY] = null;
+						Console.SetCursorPosition(FromX, FromY);
+						Console.Write(' ');
+						Console.SetCursorPosition(ToX, ToY);
+						Console.ForegroundColor = MapArray[ToX, ToY].Color;
+						Console.Write(MapArray[ToX, ToY].DisplayedChar);
+						player.PosX = ToX;
+						player.PosY = ToY;
+						player.PowerUp();
+					}
 				}
 			}
 		}
@@ -85,9 +108,18 @@ namespace Ex09_Game
 			}
 		}
 		*/
-		public void Attack(Player player)
+		public void Attack(Player player, Player Enemy)
 		{
-			player.Hit();
+			if (Enemy.isAI)
+			{
+				if (player.Power > 0)
+				{
+					Enemy.Hit();
+				}
+			}else
+			{
+				Enemy.Hit();
+			}
 		}
 		/*
 		public void Attack(int FromX, int FromY, int ToX, int ToY)

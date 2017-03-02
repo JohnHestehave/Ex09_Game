@@ -17,7 +17,9 @@ namespace Ex09_Game
 		public int PosX;
 		public int PosY;
 
-		bool isAI;
+		public int Power;
+
+		public bool isAI;
 		object AI = new object();
 
 		public Player(string name, char displayedchar, ConsoleColor color)
@@ -40,6 +42,21 @@ namespace Ex09_Game
 			}
 		}
 
+		public void PowerUp()
+		{
+			Power += 5;
+		}
+
+		public void PowerTicker()
+		{
+			while (Lives > 0) {
+				Console.SetCursorPosition(0, Program.map.MapArray.GetLength(1));
+				Console.ForegroundColor = ConsoleColor.Yellow;
+				Console.WriteLine("Powerup: "+Power + " seconds");
+				Thread.Sleep(1000);
+				Power = Math.Max(0, --Power);
+			}
+		}
 
 		public void StartAI()
 		{
@@ -55,7 +72,7 @@ namespace Ex09_Game
 					{
 						for (int x = 0; x < Program.map.MapArray.GetLength(0); x++)
 						{
-							if (Program.map.MapArray[x, y] != null && (x != PosX || y != PosY))
+							if (Program.map.MapArray[x, y] != null && (x != PosX || y != PosY) && Program.map.MapArray[x, y].Name != "POWERUP")
 							{
 								p = Program.map.MapArray[x, y];
 								found = true;
